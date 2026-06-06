@@ -1,4 +1,5 @@
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { formatCurrency } from "../services/formatingCurrency";
 
 export default function SummaryCards({ summary }) {
     console.log(summary)
@@ -17,7 +18,7 @@ export default function SummaryCards({ summary }) {
         </h3>
 
         <p className="text-3xl font-bold text-green-600 mt-2">
-          ₹{summary.totalSpentThisMonth || 0}
+          {formatCurrency(summary.totalSpentThisMonth || 0)}
         </p>
       </div>
 
@@ -27,7 +28,7 @@ export default function SummaryCards({ summary }) {
         </h3>
 
         <p className="text-3xl font-bold text-red-500 mt-2">
-          ₹{summary.highestExpense?.amount || 0}
+          {formatCurrency(summary.highestExpense?.amount || 0) }
         </p>
       </div>
 

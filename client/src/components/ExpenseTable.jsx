@@ -2,6 +2,7 @@ import { useState } from "react";
 import { deleteExpense, updateExpense } from "../services/expenseService";
 import { toast } from "react-toastify";
 import { formValidator } from "../services/formValidator";
+import { formatCurrency } from "../services/formatingCurrency";
 
 export default function ExpenseTable({
   expenses,
@@ -83,7 +84,7 @@ export default function ExpenseTable({
 
               <td className="p-4">{expense.category}</td>
 
-              <td className="p-4 font-semibold">₹{expense.amount}</td>
+              <td className="p-4 font-semibold">{formatCurrency(expense.amount)}</td>
 
               <td className="p-4">{expense.note}</td>
 
