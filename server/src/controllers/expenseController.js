@@ -4,7 +4,7 @@ import Expense from "../models/Expense.js";
 export const createExpense = async (req, res) => {
   try {
     const expense = await Expense.create(req.body);
-    res.status(201).json(expense);
+    res.status(201).json({ data: expense });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -16,20 +16,34 @@ export const getExpenses = async (req, res) => {
 
     let filter = {};
 
-    if (category) {
+    // CATEGORY FILTER
+    if (category && category !== "All") {
       filter.category = category;
     }
 
+    // DATE RANGE FILTER
     if (startDate || endDate) {
       filter.date = {};
 
-      if (startDate) filter.date.$gte = new Date(startDate);
-      if (endDate) filter.date.$lte = new Date(endDate);
+      if (startDate) {
+        filter.date.$gte = new Date(startDate);
+      }
+
+      if (endDate) {
+        filter.date.$lte = new Date(endDate);
+      }
     }
 
-    const expenses = await Expense.find(filter).sort({ date: -1 });
+    const expenses = await Expense.find(filter).sort({
+      date: -1,
+    });
 
-    res.json(expenses);
+    const grouped = expenses.reduce((acc, item) => {
+      acc[item.category] = (acc[item.category] || 0) + item.amount;
+      return acc;
+    }, {});
+
+    res.status(200).json(expenses).json(grouped);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -37,11 +51,9 @@ export const getExpenses = async (req, res) => {
 
 export const updateExpense = async (req, res) => {
   try {
-    const expense = await Expense.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+    const expense = await Expense.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
 
     if (!expense) {
       return res.status(404).json({
@@ -49,7 +61,7 @@ export const updateExpense = async (req, res) => {
       });
     }
 
-    res.json(expense);
+    res.status(201).json(expense);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -65,7 +77,7 @@ export const deleteExpense = async (req, res) => {
       });
     }
 
-    res.json({
+    res.status(201).json({
       message: "Expense deleted successfully",
     });
   } catch (error) {
@@ -77,11 +89,7 @@ export const getSummary = async (req, res) => {
   try {
     const now = new Date();
 
-    const firstDay = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      1
-    );
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
 
     const totalThisMonth = await Expense.aggregate([
       {
@@ -106,8 +114,7 @@ export const getSummary = async (req, res) => {
       },
     ]);
 
-    const highestExpense = await Expense.findOne()
-      .sort({ amount: -1 });
+    const highestExpense = await Expense.findOne().sort({ amount: -1 });
 
     res.json({
       totalSpentThisMonth: totalThisMonth[0]?.total || 0,
@@ -118,7 +125,6 @@ export const getSummary = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 export const exportExpensesCSV = async (req, res) => {
   try {
@@ -143,17 +149,14 @@ export const exportExpensesCSV = async (req, res) => {
       }
     }
 
-    const expenses = await Expense.find(filter)
-      .sort({ date: -1 })
-      .lean();
+    const expenses = await Expense.find(filter).sort({ date: -1 }).lean();
 
     const fields = [
       { label: "Amount", value: "amount" },
       { label: "Category", value: "category" },
       {
         label: "Date",
-        value: (row) =>
-          new Date(row.date).toLocaleDateString(),
+        value: (row) => new Date(row.date).toLocaleDateString(),
       },
       { label: "Note", value: "note" },
     ];
