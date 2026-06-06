@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 
-const expenseRoutes = require("./routes/expenseRoutes");
+import expenseRoutes from "./routes/expenseRoutes.js";
 
 const app = express();
 
