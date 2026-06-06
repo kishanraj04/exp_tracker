@@ -30,7 +30,7 @@ export default function FilterBar({ onFilter }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4">
+    <div className="bg-white rounded-2xl">
       {/* Top Row */}
       <div className="flex flex-col md:flex-row md:items-center gap-3">
         {/* Category */}
