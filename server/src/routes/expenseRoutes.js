@@ -4,16 +4,23 @@ import  {
   updateExpense,
   deleteExpense,
   getSummary,
+  exportExpensesCSV,
 } from "../controllers/expenseController.js";
+import express from "express";
 
-router.post("/", createExpense);
+const router = express.Router();
 
-router.get("/", getExpenses);
 
-router.get("/summary", getSummary);
+router.post("/expenses", createExpense);
 
-router.delete("/:id", deleteExpense);
+router.get("/expenses", getExpenses);
+
+router.get("/expenses/summary", getSummary);
+
+router.put("/expenses/:id", updateExpense);
+
+router.delete("/expenses/:id", deleteExpense);
 
 router.get("/export/csv", exportExpensesCSV);
 
-module.exports = router;
+export default router;

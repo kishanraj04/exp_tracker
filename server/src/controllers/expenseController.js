@@ -1,3 +1,4 @@
+import { Parser } from "json2csv";
 import Expense from "../models/Expense.js";
 
 export const createExpense = async (req, res) => {
@@ -115,5 +116,60 @@ export const getSummary = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+
+export const exportExpensesCSV = async (req, res) => {
+  try {
+    console.log("run");
+    const { category, startDate, endDate } = req.query;
+
+    const filter = {};
+
+    if (category) {
+      filter.category = category;
+    }
+
+    if (startDate || endDate) {
+      filter.date = {};
+
+      if (startDate) {
+        filter.date.$gte = new Date(startDate);
+      }
+
+      if (endDate) {
+        filter.date.$lte = new Date(endDate);
+      }
+    }
+
+    const expenses = await Expense.find(filter)
+      .sort({ date: -1 })
+      .lean();
+
+    const fields = [
+      { label: "Amount", value: "amount" },
+      { label: "Category", value: "category" },
+      {
+        label: "Date",
+        value: (row) =>
+          new Date(row.date).toLocaleDateString(),
+      },
+      { label: "Note", value: "note" },
+    ];
+
+    const parser = new Parser({ fields });
+    const csv = parser.parse(expenses);
+
+    res.header("Content-Type", "text/csv");
+    res.attachment("expenses.csv");
+
+    res.send(csv);
+  } catch (error) {
+    console.error("CSV Export Error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to export CSV",
+    });
   }
 };
