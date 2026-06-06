@@ -1,6 +1,15 @@
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
 export default function SummaryCards({ summary }) {
+    console.log(summary)
+     const chartData = summary?.totalPerCategory?.map(item => ({
+    name: item._id,
+    value: item.total
+  })) || [];
+
+  console.log(chartData)
   return (
-    <div className="grid md:grid-cols-3 gap-6">
+    <div className="grid md:grid-cols-4 gap-6">
 
       <div className="bg-white rounded-xl shadow-md p-6">
         <h3 className="text-gray-500 text-sm">
@@ -31,8 +40,22 @@ export default function SummaryCards({ summary }) {
           {summary.totalPerCategory?.length || 0}
         </p>
       </div>
+ <div className="bg-white rounded-xl shadow-md p-6">
+        <h3 className="text-gray-500 text-sm mb-3">
+          Category Wise Spending
+        </h3>
 
-      
+        <div style={{ width: "100%", height: 200 }}>
+          <ResponsiveContainer>
+            <BarChart data={chartData}>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="value" fill="#3b82f6" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>   
 
     </div>
   );
