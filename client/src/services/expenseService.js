@@ -1,7 +1,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const API = "http://localhost:5000/api";
+// const API = "http://localhost:5000/api";
+const API = "https://exp-tracker-backend-xgkl.onrender.com/api";
 
 export const getExpenses = (params) =>
   axios.get(`${API}/expenses`, { params });
