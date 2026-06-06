@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { createExpense } from "../services/expenseService";
 
-export default function ExpenseForm({
-  onSuccess,
-}) {
+export default function ExpenseForm({ onSuccess }) {
   const [form, setForm] = useState({
     amount: "",
     category: "Food",
     date: "",
     note: "",
   });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,60 +32,60 @@ export default function ExpenseForm({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="number"
-        placeholder="Amount"
-        value={form.amount}
-        onChange={(e) =>
-          setForm({
-            ...form,
-            amount: e.target.value,
-          })
-        }
-      />
-
-      <select
-        value={form.category}
-        onChange={(e) =>
-          setForm({
-            ...form,
-            category: e.target.value,
-          })
-        }
-      >
-        <option>Food</option>
-        <option>Transport</option>
-        <option>Bills</option>
-        <option>Entertainment</option>
-        <option>Other</option>
-      </select>
-
-      <input
-        type="date"
-        value={form.date}
-        onChange={(e) =>
-          setForm({
-            ...form,
-            date: e.target.value,
-          })
-        }
-      />
-
-      <input
-        placeholder="Note"
-        value={form.note}
-        onChange={(e) =>
-          setForm({
-            ...form,
-            note: e.target.value,
-          })
-        }
-      />
-
-      <button type="submit">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-6 rounded-xl shadow-md"
+    >
+      <h2 className="text-xl font-semibold mb-4">
         Add Expense
-      </button>
+      </h2>
+
+      <div className="grid md:grid-cols-5 gap-4 items-center">
+  <input
+    type="number"
+    name="amount"
+    placeholder="Amount"
+    value={form.amount}
+    onChange={handleChange}
+    className="border rounded-lg p-3"
+  />
+
+  <select
+    name="category"
+    value={form.category}
+    onChange={handleChange}
+    className="border rounded-lg p-3"
+  >
+    <option value="Food">Food</option>
+    <option value="Transport">Transport</option>
+    <option value="Bills">Bills</option>
+    <option value="Entertainment">Entertainment</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <input
+    type="date"
+    name="date"
+    value={form.date}
+    onChange={handleChange}
+    className="border rounded-lg p-3"
+  />
+
+  <input
+    type="text"
+    name="note"
+    placeholder="Note"
+    value={form.note}
+    onChange={handleChange}
+    className="border rounded-lg p-3"
+  />
+
+  <button
+    type="submit"
+    className="bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700 h-fit" >
+    Add Expense
+  </button>
+</div>
     </form>
   );
 }

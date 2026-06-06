@@ -25,17 +25,27 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Expense Tracker</h1>
+  <div className="min-h-screen bg-slate-100">
+    <div className="max-w-7xl mx-auto p-6">
+
+      <h1 className="text-4xl font-bold text-slate-800 mb-8">
+        Expense Tracker
+      </h1>
 
       <SummaryCards summary={summary} />
 
-      <ExpenseForm onSuccess={loadData} />
+      <div className="mt-8">
+        <ExpenseForm onSuccess={loadData} />
+      </div>
 
-      <ExpenseTable
-        expenses={expenses}
-        onRefresh={loadData}
-      />
+      <div className="mt-8">
+        <ExpenseTable
+          expenses={expenses}
+          onRefresh={loadData}
+        />
+      </div>
+
     </div>
-  );
+  </div>
+);
 }

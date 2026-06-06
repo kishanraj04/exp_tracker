@@ -1,12 +1,20 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const API = "http://localhost:5000/api";
 
 export const getExpenses = (params) =>
   axios.get(`${API}/expenses`, { params });
 
-export const createExpense = (data) =>
-  axios.post(`${API}/expenses`, data);
+export const createExpense =async (data) =>
+  {
+    const response = await axios.post(`${API}/expenses`, data);
+    console.log(response?.status);
+    if(response?.status === 201){
+        toast.success("Expense added successfully");
+    }
+    return response;
+  }
 
 export const updateExpense = (id, data) =>
   axios.put(`${API}/expenses/${id}`, data);
