@@ -17,7 +17,13 @@ export const createExpense =async (data) =>
   }
 
 export const updateExpense = (id, data) =>
-  axios.put(`${API}/expenses/${id}`, data);
+  {
+    const response = axios.put(`${API}/expenses/${id}`, data);
+    if(response?.status === 200){
+        toast.success("Expense updated successfully");
+    }
+    return response;
+  }
 
 export const deleteExpense = (id) =>
   axios.delete(`${API}/expenses/${id}`);
