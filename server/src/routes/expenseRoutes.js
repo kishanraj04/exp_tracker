@@ -10,4 +10,6 @@ router.post("/", createExpense);
 
 router.get("/", getExpenses);
 
+router.get("/summary", getSummary);
+
 module.exports = router;
