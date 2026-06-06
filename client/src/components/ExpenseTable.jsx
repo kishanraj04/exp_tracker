@@ -3,7 +3,11 @@ import { deleteExpense, updateExpense } from "../services/expenseService";
 import { toast } from "react-toastify";
 import { formValidator } from "../services/formValidator";
 
-export default function ExpenseTable({ expenses, onRefresh }) {
+export default function ExpenseTable({
+  expenses,
+  onRefresh,
+  filters,
+}){
   const [openModal, setOpenModal] = useState(false);
 
   const [editingId, setEditingId] = useState("");
@@ -20,7 +24,7 @@ export default function ExpenseTable({ expenses, onRefresh }) {
     if (response?.status === 201) {
       toast.error("Expense deleted successfully");
     }
-    onRefresh();
+    onRefresh(filters);
   };
 
   const onEdit = (expense) => {
@@ -38,7 +42,7 @@ export default function ExpenseTable({ expenses, onRefresh }) {
 
   const handleUpdate = async () => {
     try {
-      formValidator(editForm);
+      if(!formValidator(editForm)) return;
       const response = await updateExpense(editingId, editForm);
       console.log(response);
       if (response.status === 201) {
@@ -46,7 +50,7 @@ export default function ExpenseTable({ expenses, onRefresh }) {
 
         setOpenModal(false);
 
-        onRefresh();
+        onRefresh(filters);
          setOpenModal(false)
       }
     } catch (error) {
@@ -56,6 +60,9 @@ export default function ExpenseTable({ expenses, onRefresh }) {
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden">
+
+      
+
       <table className="w-full">
         <thead className="bg-slate-100">
           <tr>
