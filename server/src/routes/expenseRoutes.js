@@ -8,5 +8,6 @@ import  {
 
 router.post("/", createExpense);
 
+router.get("/", getExpenses);
 
 module.exports = router;
