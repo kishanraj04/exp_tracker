@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { deleteExpense, updateExpense } from "../services/expenseService";
 import { toast } from "react-toastify";
+import { formValidator } from "../services/formValidator";
 
 export default function ExpenseTable({ expenses, onRefresh }) {
   const [openModal, setOpenModal] = useState(false);
@@ -37,14 +38,7 @@ export default function ExpenseTable({ expenses, onRefresh }) {
 
   const handleUpdate = async () => {
     try {
-      if(editForm.amount === "" || editForm.category === "" || editForm.date === ""){
-        toast.error("Please fill all required fields");
-        return;
-      }
-      else if(isNaN(editForm.amount) || Number(editForm.amount) <= 0){
-        toast.error("Please enter a valid amount");
-        return;
-      }
+      formValidator(editForm);
       const response = await updateExpense(editingId, editForm);
       console.log(response);
       if (response.status === 201) {

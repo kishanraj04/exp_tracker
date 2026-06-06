@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createExpense } from "../services/expenseService";
+import { formValidator } from "../services/formValidator";
 
 export default function ExpenseForm({ onSuccess }) {
   const [form, setForm] = useState({
@@ -18,7 +19,7 @@ export default function ExpenseForm({ onSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if(!formValidator(form)) return;
     await createExpense(form);
 
     setForm({
