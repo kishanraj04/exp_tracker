@@ -14,4 +14,6 @@ router.get("/summary", getSummary);
 
 router.delete("/:id", deleteExpense);
 
+router.get("/export/csv", exportExpensesCSV);
+
 module.exports = router;
