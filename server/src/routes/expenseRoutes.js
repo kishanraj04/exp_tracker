@@ -12,4 +12,6 @@ router.get("/", getExpenses);
 
 router.get("/summary", getSummary);
 
+router.delete("/:id", deleteExpense);
+
 module.exports = router;
