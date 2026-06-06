@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { handleExportCSV } from "../services/exportCsv";
 
 export default function FilterBar({ onFilter }) {
   const [filters, setFilters] = useState({
@@ -30,10 +31,8 @@ export default function FilterBar({ onFilter }) {
 
   return (
     <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4">
-
       {/* Top Row */}
       <div className="flex flex-col md:flex-row md:items-center gap-3">
-
         {/* Category */}
         <select
           name="category"
@@ -51,7 +50,6 @@ export default function FilterBar({ onFilter }) {
 
         {/* Date Range Group */}
         <div className="flex flex-1 gap-2">
-
           <input
             type="date"
             name="startDate"
@@ -71,7 +69,6 @@ export default function FilterBar({ onFilter }) {
 
         {/* Buttons */}
         <div className="flex gap-2">
-
           <button
             onClick={handleApply}
             className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl text-sm font-medium transition"
@@ -86,8 +83,13 @@ export default function FilterBar({ onFilter }) {
             Reset
           </button>
 
+          <button
+            onClick={handleExportCSV}
+            className="bg-green-600 hover:bg-green-700 text-gray-700 px-5 py-3 rounded-xl text-sm font-medium transition"
+          >
+            Export CSV
+          </button>
         </div>
-
       </div>
     </div>
   );

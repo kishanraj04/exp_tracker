@@ -30,3 +30,6 @@ export const deleteExpense = (id) =>
 
 export const getSummary = () =>
   axios.get(`${API}/expenses/summary`);
+
+export const exportExpensesCSV = () =>
+  axios.get(`${API}/export/csv`);
