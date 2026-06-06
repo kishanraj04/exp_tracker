@@ -72,3 +72,48 @@ export const deleteExpense = async (req, res) => {
   }
 };
 
+export const getSummary = async (req, res) => {
+  try {
+    const now = new Date();
+
+    const firstDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1
+    );
+
+    const totalThisMonth = await Expense.aggregate([
+      {
+        $match: {
+          date: { $gte: firstDay },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$amount" },
+        },
+      },
+    ]);
+
+    const categoryTotals = await Expense.aggregate([
+      {
+        $group: {
+          _id: "$category",
+          total: { $sum: "$amount" },
+        },
+      },
+    ]);
+
+    const highestExpense = await Expense.findOne()
+      .sort({ amount: -1 });
+
+    res.json({
+      totalSpentThisMonth: totalThisMonth[0]?.total || 0,
+      totalPerCategory: categoryTotals,
+      highestExpense,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
