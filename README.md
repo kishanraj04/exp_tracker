@@ -11,10 +11,10 @@ This project is designed based on the official assignment:
 #  Live Demo
 
 Frontend (Vercel):  
-https://your-frontend-url.vercel.app
+https://exp-tracker-frontend-b0yy.onrender.com/
 
 Backend (Render):  
-https://your-backend-url.onrender.com
+"https://exp-tracker-backend-xgkl.onrender.com/api"
 
 ---
 
